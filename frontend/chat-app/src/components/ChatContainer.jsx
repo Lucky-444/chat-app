@@ -1,4 +1,3 @@
-
 import { useChatStore } from "../store/useChatStore";
 import { useEffect, useRef } from "react";
 
@@ -25,10 +24,9 @@ const ChatContainer = () => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
       subscribeToMessages();
-
       return () => unsubscribeFromMessages();
     }
-  }, [selectedUser?._id]);
+  }, [selectedUser?._id, getMessages, subscribeToMessages,  unsubscribeFromMessages]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -54,6 +52,7 @@ const ChatContainer = () => {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => {
           const isMyMessage = message.senderId === authUser?._id;
+
           return (
             <div
               key={message._id || index}
@@ -72,13 +71,11 @@ const ChatContainer = () => {
                   />
                 </div>
               </div>
-
               <div className="chat-header mb-1 text-sm opacity-70">
                 <time className="text-xs ml-1">
                   {formatMessageTime(message.createdAt)}
                 </time>
               </div>
-
               <div className="chat-bubble max-w-xs break-words flex flex-col bg-base-200 text-base-content">
                 {message.image && (
                   <img
